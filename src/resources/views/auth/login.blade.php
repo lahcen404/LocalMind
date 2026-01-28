@@ -1,7 +1,8 @@
 @extends('layouts.app')
 @section('title', 'Login | LocalMind')
 @section('content')
-<div class="w-full max-w-md">
+<div class="flex items-center justify-center min-h-[calc(100vh-6rem)] w-full">
+    <div class="w-full max-w-md">
     <!-- Login Card -->
     <div class="bg-zinc-900/50 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-zinc-800 transition-all hover:border-indigo-500/30">    <!-- Header Section -->
     <div class="bg-gradient-to-br from-indigo-600 to-violet-700 p-8 text-center relative overflow-hidden">
