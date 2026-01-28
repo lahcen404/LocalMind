@@ -36,6 +36,16 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    // relation with question
+    public function questions(){
+        return $this->hasMany(Question::class);
+    }
+
+    // relation with response
+    public function responses(){
+        return $this->hasMany(Response::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *
