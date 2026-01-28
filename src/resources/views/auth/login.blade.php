@@ -17,8 +17,7 @@
 
     <!-- Form Section -->
     <div class="p-8">
-        <form action="#" method="POST" class="space-y-6">
-            <!-- CSRF protection -->
+        <form action="{{ route('login.submit') }}" method="POST" class="space-y-6">            <!-- CSRF protection -->
             @csrf 
 
             <!-- Email Input -->
