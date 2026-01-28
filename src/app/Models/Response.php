@@ -1,0 +1,23 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Response extends Model
+{
+    protected $fillable = [
+        'user_id','question_id','content'
+    ];
+
+    // relation with user
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
+
+    // relation with question
+    public function question(){
+        return $this->belongsTo(Question::class);
+    }
+}
