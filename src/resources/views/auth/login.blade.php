@@ -15,10 +15,34 @@
         <p class="relative z-10 text-indigo-100 text-xs font-medium tracking-widest uppercase opacity-80 mt-1">Authorized Access Only</p>
     </div>
 
+
+    
+@if ($errors->any())
+    <div class="mb-4 bg-red-500/10 border border-red-500/50 rounded-xl p-4">
+        <div class="flex items-center gap-3">
+            <i class="fa-solid fa-circle-exclamation text-red-500"></i>
+            <p class="text-red-400 text-sm font-bold">
+                {{ $errors->first('email') }}
+            </p>
+        </div>
+    </div>
+@endif
+
+
+@if (session('success'))
+    <div class="mb-4 bg-emerald-500/10 border border-emerald-500/50 rounded-xl p-4">
+        <div class="flex items-center gap-3">
+            <i class="fa-solid fa-check-circle text-emerald-500"></i>
+            <p class="text-emerald-400 text-sm font-bold">
+                {{ session('success') }}
+            </p>
+        </div>
+    </div>
+@endif
+
     <!-- Form Section -->
     <div class="p-8">
-        <form action="#" method="POST" class="space-y-6">
-            <!-- CSRF protection -->
+        <form action="{{ route('login.submit') }}" method="POST" class="space-y-6">            <!-- CSRF protection -->
             @csrf 
 
             <!-- Email Input -->
