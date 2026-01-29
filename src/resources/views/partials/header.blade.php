@@ -15,7 +15,7 @@
                 <!-- Public Link -->
                 <a href="/questions" class="text-zinc-400 hover:text-white text-sm font-medium transition-colors">Browse</a>
                 
-                <!-- Protected Links -->
+                
                 @auth
                     @if(Auth::user()->role === \App\Enums\UserRole::ADMIN)
                         
@@ -23,15 +23,16 @@
                     @else
                         
                         <a href="{{ route('dashboard') }}" class="text-zinc-400 hover:text-white text-sm font-medium transition-colors">Dashboard</a>
+                        <a href="{{ route('favorites.index') }}" class="text-zinc-400 hover:text-white text-sm font-medium transition-colors">Favorites                                                   </a>
                     @endif
                 @endauth
             </div>
 
-            <!-- DYNAMIC AUTH SECTION -->
+            <!-- as a guest -->
             <div class="flex items-center space-x-4">
                 
                 @guest
-                    <!-- SCENARIO 1: GUEST -->
+                    
                     <a href="{{ route('login') }}" class="text-zinc-400 hover:text-white text-sm font-medium transition-colors">
                         Login
                     </a>
@@ -41,7 +42,7 @@
                 @endguest
 
                 @auth
-                    <!-- SCENARIO 2: LOGGED IN -->
+                    
                     <div class="flex items-center gap-4">
                         
                         <!-- Profile Link -->

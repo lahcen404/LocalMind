@@ -24,4 +24,16 @@ class Question extends Model
     public function responses(){
         return $this->hasMany(Response::class);
     }
+
+    public function isFavoritedBy(?User $user): bool
+    {
+        if (!$user) return false;
+        
+        return $this->favoritedBy()->where('user_id', $user->id)->exists();
+    }
+
+    public function favoritedBy()
+    {
+        return $this->belongsToMany(User::class, 'favorites')->withTimestamps();
+    }
 }
