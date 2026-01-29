@@ -21,7 +21,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
   
-    Route::get('/questions/create', [QuestionController::class, 'create'])->name('questions.create');
+    Route::get('/questions/create',function (){ 
+        if(Auth::user()->role != UserRole::MEMBER){
+            return redirect()->route('admin.dashboard')->with('error','Only members can creaate questions');
+        }
+    } ,[QuestionController::class, 'create'])->name('questions.create');
+    
     Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');
     
 //    Route::post('/questions/{question}/responses', [ResponseController::class, 'store'])->name('responses.store');
