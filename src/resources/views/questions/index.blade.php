@@ -72,7 +72,7 @@
                 <div class="mt-4 pt-4 border-t border-zinc-800/50 flex items-center gap-4">
                     <div class="flex items-center gap-1.5 text-zinc-500 text-xs">
                         <i class="fa-regular fa-comment"></i>
-                       {{--}} <span>{{ $question->responses->count() }} responses</span> --}}
+                        <span>{{ $question->responses->count() }} responses</span>
                     </div>
                 </div>
             </a>

@@ -3,7 +3,7 @@
 use App\Enums\UserRole;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\QuestionController;
-use App\Http\Controllers\ResponseController; // Added this import
+use App\Http\Controllers\ResponseController; 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -29,7 +29,7 @@ Route::middleware('auth')->group(function () {
     
     Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');
     
-//    Route::post('/questions/{question}/responses', [ResponseController::class, 'store'])->name('responses.store');
+   Route::post('/questions/{question}/responses', [ResponseController::class, 'store'])->name('responses.store');
 
     Route::get('/member/dashboard', function () {
         if (Auth::user()->role != UserRole::MEMBER) {
