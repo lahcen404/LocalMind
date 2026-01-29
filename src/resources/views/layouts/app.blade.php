@@ -35,7 +35,32 @@
 @include('partials.header')
 
 
+
+
 <main class="flex-grow pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+
+    @if(session('error'))
+    <div class="max-w-4xl mx-auto mb-6">
+        <div class="bg-red-500/10 border border-red-500/50 p-4 rounded-xl flex items-center gap-3 shadow-lg shadow-red-900/20 animate-pulse">
+            <i class="fa-solid fa-circle-exclamation text-red-500"></i>
+            <p class="text-red-200 text-sm font-bold uppercase tracking-widest">
+                {{ session('error') }}
+            </p>
+        </div>
+    </div>
+@endif
+
+@if(session('success'))
+    <div class="max-w-4xl mx-auto mb-6">
+        <div class="bg-emerald-500/10 border border-emerald-500/50 p-4 rounded-xl flex items-center gap-3 shadow-lg shadow-emerald-900/20">
+            <i class="fa-solid fa-circle-check text-emerald-500"></i>
+            <p class="text-emerald-200 text-sm font-bold uppercase tracking-widest">
+                {{ session('success') }}
+            </p>
+        </div>
+    </div>
+@endif
+
     @yield('content')
 </main>
 

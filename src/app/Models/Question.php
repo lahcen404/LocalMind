@@ -21,7 +21,7 @@ class Question extends Model
     }
 
     // relation with response
-    public function response(){
+    public function responses(){
         return $this->hasMany(Response::class);
     }
 }
