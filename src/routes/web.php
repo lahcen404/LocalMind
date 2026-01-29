@@ -30,7 +30,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/questions/{question}', [QuestionController::class, 'destroy'])->name('questions.destroy');
     Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');
     
-    Route::post('/questions/{question}/responses', [ResponseController::class, 'store'])->name('responses.store');
 
    // membeer dashbaord
     Route::get('/member/dashboard', function () {
@@ -52,6 +51,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
     Route::post('/questions/{question}/favorite', [FavoriteController::class, 'toggle'])->name('questions.favorite');
     
+
+    // response 
+    Route::post('/questions/{question}/responses', [ResponseController::class, 'store'])->name('responses.store');
+    Route::get('/responses/{response}/edit', [ResponseController::class, 'edit'])->name('responses.edit');
+    Route::put('/responses/{response}', [ResponseController::class, 'update'])->name('responses.update');
+    Route::delete('/responses/{response}', [ResponseController::class, 'destroy'])->name('responses.destroy');
+
 });
 
 
