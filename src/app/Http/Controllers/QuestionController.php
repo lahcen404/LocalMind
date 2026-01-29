@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserRole;
 use App\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -36,4 +37,45 @@ class QuestionController extends Controller
 
     return view('questions.show', compact('question'));
 }
+
+public function edit(Question $question)
+    {
+        
+        if (Auth::id() !== $question->user_id) {
+            return redirect()->route('questions.index')->with('error', 'You cannot edit this question !!!');
+        }
+
+        return view('questions.edit', compact('question'));
+    }
+
+    public function update(Request $request, Question $question)
+    {
+        
+        if (Auth::id() !== $question->user_id) {
+            return abort(403);
+        }
+
+        $validated = $request->validate([
+            'title' => 'required|min:5',
+            'content' => 'required|min:10',
+            'location' => 'required|string',
+        ]);
+
+        $question->update($validated);
+
+        return redirect()->route('questions.show', $question)->with('success', 'Question updated successfully!!!');
+    }
+
+    public function destroy(Question $question)
+    {
+        
+        if (Auth::id() === $question->user_id || Auth::user()->role === UserRole::ADMIN) {
+            $question->delete();
+            return redirect()->route('questions.index')->with('success', 'Question deleted successfully!!!');
+        }
+
+        return redirect()->route('questions.index')->with('error', 'you cannot delete this question!!!');
+    }
+
+    
 }
