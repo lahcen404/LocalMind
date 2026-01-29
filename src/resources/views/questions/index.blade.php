@@ -3,10 +3,10 @@
 @section('title', 'Community Feed | LocalMind')
 
 @section('content')
-<div class="w-full max-w-4xl mx-auto">
+<div class="w-full max-w-4xl mx-auto space-y-8">
 
     {{-- Header --}}
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
             <h1 class="text-3xl font-black text-white italic tracking-tighter uppercase">
                 Community Feed
@@ -25,15 +25,53 @@
         @endauth
     </div>
 
+    {{-- Search & Filter Terminal --}}
+    <div class="bg-zinc-900/60 border border-zinc-800 rounded-3xl p-6 shadow-xl relative overflow-hidden group">
+        <div class="absolute top-0 right-0 -mt-10 -mr-10 w-32 h-32 bg-indigo-500/5 rounded-full blur-2xl"></div>
+
+        <form action="{{ route('questions.index') }}" method="GET" class="flex flex-col md:flex-row gap-4 relative z-10">
+
+            {{-- Keyword Search --}}
+            <div class="flex-grow relative group">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-zinc-600 group-focus-within:text-indigo-400 transition-colors"></i>
+                <input type="text" name="keyword" value="{{ request('keyword') }}"
+                       placeholder="Search intelligence keywords..."
+                       class="w-full bg-zinc-950 border border-zinc-800 rounded-xl py-3.5 pl-11 pr-4 text-white text-sm focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/20 outline-none transition-all placeholder:text-zinc-700">
+            </div>
+
+            {{-- Location Filter --}}
+            <div class="md:w-1/3 relative group">
+                <i class="fa-solid fa-location-crosshairs absolute left-4 top-1/2 -translate-y-1/2 text-zinc-600 group-focus-within:text-indigo-400 transition-colors"></i>
+                <input type="text" name="location" value="{{ request('location') }}"
+                       placeholder="Filter by location..."
+                       class="w-full bg-zinc-950 border border-zinc-800 rounded-xl py-3.5 pl-11 pr-4 text-white text-sm focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/20 outline-none transition-all placeholder:text-zinc-700">
+            </div>
+
+            {{-- Submit & Clear --}}
+            <div class="flex gap-2">
+                <button type="submit"
+                        class="bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-3.5 rounded-xl font-black uppercase text-[10px] tracking-widest transition-all shadow-lg shadow-indigo-900/20 active:scale-95">
+                    Filter
+                </button>
+
+                @if(request('keyword') || request('location'))
+                    <a href="{{ route('questions.index') }}"
+                       class="bg-zinc-800 hover:bg-zinc-700 text-zinc-400 px-4 py-3.5 rounded-xl transition-all flex items-center justify-center"
+                       title="Clear Filters">
+                        <i class="fa-solid fa-xmark"></i>
+                    </a>
+                @endif
+            </div>
+        </form>
+    </div>
+
     {{-- Questions List --}}
     <div class="space-y-4">
-
         @forelse ($questions as $question)
             <div class="bg-zinc-900/40 border border-zinc-800 rounded-2xl p-6 hover:border-zinc-700 transition-all group relative">
 
                 {{-- Clickable Card --}}
-                <a href="{{ route('questions.show', $question) }}"
-                   class="absolute inset-0 rounded-2xl z-0"></a>
+                <a href="{{ route('questions.show', $question) }}" class="absolute inset-0 rounded-2xl z-0"></a>
 
                 <div class="flex items-start justify-between gap-4 relative z-10 pointer-events-none">
 
@@ -72,9 +110,7 @@
 
                 {{-- Footer --}}
                 <div class="mt-6 pt-4 border-t border-zinc-800/50 flex flex-wrap items-center justify-between gap-4 relative z-10">
-
                     <div class="flex items-center gap-6">
-
                         {{-- Responses --}}
                         <div class="flex items-center gap-2 text-zinc-500">
                             <i class="fa-regular fa-comment text-sm"></i>
@@ -88,11 +124,9 @@
                             <form action="{{ route('questions.favorite', $question) }}" method="POST" class="pointer-events-auto">
                                 @csrf
                                 <button type="submit"
-                                    class="flex items-center gap-2 transition-colors
-                                    {{ $question->isFavoritedBy(Auth::user()) ? 'text-rose-500' : 'text-zinc-500 hover:text-rose-400' }}">
-                                    
+                                        class="flex items-center gap-2 transition-colors
+                                        {{ $question->isFavoritedBy(Auth::user()) ? 'text-rose-500' : 'text-zinc-500 hover:text-rose-400' }}">
                                     <i class="{{ $question->isFavoritedBy(Auth::user()) ? 'fa-solid' : 'fa-regular' }} fa-heart text-sm"></i>
-
                                     <span class="text-[10px] font-black uppercase tracking-widest">
                                         {{ $question->favoritedBy->count() }} saves
                                     </span>
@@ -139,16 +173,21 @@
                     </div>
                 </div>
             </div>
-
         @empty
-            <div class="text-center py-20 bg-zinc-900/20 rounded-3xl border-2 border-dashed border-zinc-800">
-                <i class="fa-solid fa-comment-slash text-zinc-800 text-5xl mb-4"></i>
+            <div class="text-center py-24 bg-zinc-900/20 rounded-3xl border-2 border-dashed border-zinc-800">
+                <i class="fa-solid fa-magnifying-glass text-zinc-800 text-5xl mb-4"></i>
                 <p class="text-zinc-500 italic uppercase tracking-widest text-xs font-bold">
-                    No Question found !!!
+                    No intelligence found matching your criteria.
                 </p>
+                @if(request('keyword') || request('location'))
+                    <a href="{{ route('questions.index') }}"
+                       class="mt-4 inline-block text-indigo-400 font-bold uppercase text-[10px] tracking-widest border-b border-indigo-400/30">
+                        Clear Search
+                    </a>
+                @endif
             </div>
         @endforelse
-
     </div>
+
 </div>
 @endsection

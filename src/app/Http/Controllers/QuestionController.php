@@ -8,9 +8,26 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 class QuestionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $questions = Question::with(['user', 'responses'])->latest()->get();
+        $keyword = $request->input('keyword');
+        $location = $request->input('location');
+
+        $questions = Question::with(['user', 'responses', 'favoritedBy'])
+                // seearch by keyword in title or content
+            ->when($keyword, function ($query, $keyword) {
+                return $query->where(function ($q) use ($keyword) {
+                    $q->where('title', 'like', "%{$keyword}%")
+                      ->orWhere('content', 'like', "%{$keyword}%");
+                });
+            })
+            // fiilter by location
+            ->when($location, function ($query, $location) {
+                return $query->where('location', 'like', "%{$location}%");
+            })
+            ->latest()
+            ->get();
+
         return view('questions.index', compact('questions'));
     }
 
