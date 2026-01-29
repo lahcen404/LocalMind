@@ -18,7 +18,7 @@
 
         @auth
             <a href="{{ route('questions.create') }}"
-               class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-xl font-bold transition-all shadow-lg shadow-indigo-900/40 flex items-center gap-2">
+               class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-xl font-bold transition-all shadow-lg shadow-indigo-900/40 flex items-center justify-center gap-2">
                 <i class="fa-solid fa-plus text-xs"></i>
                 <span>Ask Question</span>
             </a>
@@ -28,7 +28,7 @@
     {{-- Questions List --}}
     <div class="space-y-4">
 
-        @forelse($questions as $question)
+        @forelse ($questions as $question)
             <div class="bg-zinc-900/40 border border-zinc-800 rounded-2xl p-6 hover:border-zinc-700 transition-all group relative">
 
                 {{-- Clickable Card --}}
@@ -59,7 +59,7 @@
                         </p>
                     </div>
 
-                    {{-- User Avatar --}}
+                    {{-- User --}}
                     <div class="flex flex-col items-center flex-shrink-0">
                         <div class="w-10 h-10 bg-zinc-800 rounded-xl flex items-center justify-center text-zinc-500 font-bold border border-zinc-700 mb-1 group-hover:border-indigo-500/50 transition-colors">
                             {{ substr($question->user->name, 0, 1) }}
@@ -70,8 +70,8 @@
                     </div>
                 </div>
 
-                {{-- Card Footer --}}
-                <div class="mt-6 pt-4 border-t border-zinc-800/50 flex items-center justify-between relative z-10">
+                {{-- Footer --}}
+                <div class="mt-6 pt-4 border-t border-zinc-800/50 flex flex-wrap items-center justify-between gap-4 relative z-10">
 
                     <div class="flex items-center gap-6">
 
@@ -85,7 +85,7 @@
 
                         {{-- Favorites --}}
                         @auth
-                            <form action="{{ route('questions.favorite', $question) }}" method="POST">
+                            <form action="{{ route('questions.favorite', $question) }}" method="POST" class="pointer-events-auto">
                                 @csrf
                                 <button type="submit"
                                     class="flex items-center gap-2 transition-colors
@@ -108,9 +108,34 @@
                         @endauth
                     </div>
 
-                    {{-- Arrow --}}
-                    <div class="text-zinc-700 group-hover:text-indigo-500 transition-colors">
-                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    {{-- Actions --}}
+                    <div class="flex items-center gap-3 pointer-events-auto">
+                        @auth
+                            @if (Auth::id() === $question->user_id)
+                                <a href="{{ route('questions.edit', $question) }}"
+                                   class="text-zinc-500 hover:text-indigo-400 transition-colors p-1"
+                                   title="Edit">
+                                    <i class="fa-solid fa-pen-to-square text-sm"></i>
+                                </a>
+                            @endif
+
+                            @if (Auth::id() === $question->user_id || Auth::user()->role === \App\Enums\UserRole::ADMIN)
+                                <form action="{{ route('questions.destroy', $question) }}" method="POST"
+                                      onsubmit="return confirm('Are you sure you want to delete this question?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                            class="text-zinc-500 hover:text-rose-500 transition-colors p-1"
+                                            title="Delete">
+                                        <i class="fa-solid fa-trash-can text-sm"></i>
+                                    </button>
+                                </form>
+                            @endif
+                        @endauth
+
+                        <div class="text-zinc-700 group-hover:text-indigo-500 transition-colors ml-2">
+                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -119,7 +144,7 @@
             <div class="text-center py-20 bg-zinc-900/20 rounded-3xl border-2 border-dashed border-zinc-800">
                 <i class="fa-solid fa-comment-slash text-zinc-800 text-5xl mb-4"></i>
                 <p class="text-zinc-500 italic uppercase tracking-widest text-xs font-bold">
-                    No community intelligence found.
+                    No Question found !!!
                 </p>
             </div>
         @endforelse
