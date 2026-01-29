@@ -12,12 +12,18 @@
 
             <!-- Navigation Links -->
             <div class="hidden md:flex items-center space-x-8">
-                
+                <!-- Public Link -->
                 <a href="/questions" class="text-zinc-400 hover:text-white text-sm font-medium transition-colors">Browse</a>
                 
-                
+                <!-- Protected Links -->
                 @auth
-                    <a href="{{ route('dashboard') }}" class="text-zinc-400 hover:text-white text-sm font-medium transition-colors">Dashboard</a>
+                    @if(Auth::user()->role === \App\Enums\UserRole::ADMIN)
+                        
+                        <a href="{{ route('admin.dashboard') }}" class="text-rose-400 hover:text-rose-300 text-sm font-bold transition-colors">Admin Panel</a>
+                    @else
+                        
+                        <a href="{{ route('dashboard') }}" class="text-zinc-400 hover:text-white text-sm font-medium transition-colors">Dashboard</a>
+                    @endif
                 @endauth
             </div>
 
@@ -25,7 +31,7 @@
             <div class="flex items-center space-x-4">
                 
                 @guest
-                    
+                    <!-- SCENARIO 1: GUEST -->
                     <a href="{{ route('login') }}" class="text-zinc-400 hover:text-white text-sm font-medium transition-colors">
                         Login
                     </a>
@@ -35,13 +41,12 @@
                 @endguest
 
                 @auth
-                
+                    <!-- SCENARIO 2: LOGGED IN -->
                     <div class="flex items-center gap-4">
                         
-                        <!-- User Profile Link with Mini Avatar -->
-                        <a href="{{ route('dashboard') }}" class="flex items-center gap-2 group">
-                            <div class="w-8 h-8 bg-indigo-500/20 rounded-full flex items-center justify-center text-indigo-400 font-bold border border-indigo-500/30 group-hover:border-indigo-400 transition-colors">
-                                <!-- Shows first letter of name, e.g., 'A' -->
+                        <!-- Profile Link -->
+                        <a href="{{ Auth::user()->role === \App\Enums\UserRole::ADMIN ? route('admin.dashboard') : route('dashboard') }}" class="flex items-center gap-2 group">
+                            <div class="w-8 h-8 {{ Auth::user()->role === \App\Enums\UserRole::ADMIN ? 'bg-rose-500/20 border-rose-500/30 text-rose-400' : 'bg-indigo-500/20 border-indigo-500/30 text-indigo-400' }} rounded-full flex items-center justify-center font-bold border group-hover:border-opacity-100 transition-colors">
                                 {{ substr(Auth::user()->name, 0, 1) }}
                             </div>
                             <span class="hidden sm:inline text-zinc-300 group-hover:text-white text-sm font-medium transition-colors">
@@ -52,7 +57,7 @@
                         <!-- Divider -->
                         <div class="h-4 w-px bg-zinc-800"></div>
 
-                        <!-- Logout Button -->
+                        <!-- Secure Logout Button -->
                         <form action="{{ route('logout') }}" method="POST" class="inline">
                             @csrf
                             <button type="submit" class="text-zinc-500 hover:text-red-400 transition-colors p-2 rounded-full hover:bg-red-500/10" title="Sign Out">
