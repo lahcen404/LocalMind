@@ -2,28 +2,11 @@
 
 use App\Enums\UserRole;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\ResponseController; // Added this import
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function () {return view('welcome');});
-Route::middleware('auth')->group(function () {
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-Route::get('/member/dashboard' , function(){
- if(Auth::user()->role != UserRole::MEMBER ){
-        return redirect()->route('admin.dashboard')->with('error', 'You dont have access ');
-
-    }
-
-return view('member.dashboard');})->name('dashboard');
-
-Route::get('/admin/dashboard' , function(){
-    if(Auth::user()->role != UserRole::ADMIN ){
-        return redirect()->route('dashboard')->with('error', 'You dont have access ');
-
-    }
-    return view('admin.dashboard');})->name('admin.dashboard');
-});
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
@@ -31,3 +14,34 @@ Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 });
+
+
+Route::middleware('auth')->group(function () {
+    
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+  
+    Route::get('/questions/create', [QuestionController::class, 'create'])->name('questions.create');
+    Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');
+    
+//    Route::post('/questions/{question}/responses', [ResponseController::class, 'store'])->name('responses.store');
+
+    Route::get('/member/dashboard', function () {
+        if (Auth::user()->role != UserRole::MEMBER) {
+            return redirect()->route('admin.dashboard')->with('error', 'Redirected to Admin area.');
+        }
+        return view('member.dashboard');
+    })->name('dashboard');
+
+    Route::get('/admin/dashboard', function () {
+        if (Auth::user()->role != UserRole::ADMIN) {
+            return redirect()->route('dashboard')->with('error', 'Access Denied.');
+        }
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+});
+
+
+Route::get('/questions', [QuestionController::class, 'index'])->name('questions.index');
+
+Route::get('/questions/{question}', [QuestionController::class, 'show'])->name('questions.show');
