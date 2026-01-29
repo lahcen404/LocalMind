@@ -5,26 +5,8 @@
 @section('content')
 <div class="w-full max-w-4xl mx-auto space-y-10">
 
-    {{-- 1. ALERT MESSAGES --}}
-    @if(session('success'))
-        <div class="bg-emerald-500/10 border border-emerald-500/50 p-4 rounded-2xl flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-500">
-            <i class="fa-solid fa-circle-check text-emerald-500"></i>
-            <p class="text-emerald-200 text-xs font-black uppercase tracking-widest">
-                {{ session('success') }}
-            </p>
-        </div>
-    @endif
+  
 
-    @if(session('error'))
-        <div class="bg-red-500/10 border border-red-500/50 p-4 rounded-2xl flex items-center gap-3">
-            <i class="fa-solid fa-triangle-exclamation text-red-500"></i>
-            <p class="text-red-200 text-xs font-black uppercase tracking-widest">
-                {{ session('error') }}
-            </p>
-        </div>
-    @endif
-
-    {{-- 2. MAIN QUESTION --}}
     <article class="bg-zinc-900/60 border border-zinc-800 rounded-3xl p-8 shadow-2xl relative overflow-hidden group">
         <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-indigo-500/5 rounded-full blur-3xl"></div>
 
@@ -60,9 +42,7 @@
                 </div>
             </div>
 
-            <div class="text-zinc-600 text-[10px] font-black uppercase tracking-[0.2em] hidden sm:block">
-                Reference: LM-{{ str_pad($question->id, 5, '0', STR_PAD_LEFT) }}
-            </div>
+            
         </div>
     </article>
 
