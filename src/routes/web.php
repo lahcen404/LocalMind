@@ -2,6 +2,7 @@
 
 use App\Enums\UserRole;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ResponseController; 
 use Illuminate\Support\Facades\Auth;
@@ -21,16 +22,16 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
   
-    Route::get('/questions/create',function (){ 
-        if(Auth::user()->role != UserRole::MEMBER){
-            return redirect()->route('admin.dashboard')->with('error','Only members can creaate questions');
-        }
-    } ,[QuestionController::class, 'create'])->name('questions.create');
+    Route::get('/questions/create', [QuestionController::class, 'create'])->name('questions.create')->middleware('auth');
+
     
+
+
     Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');
     
-   Route::post('/questions/{question}/responses', [ResponseController::class, 'store'])->name('responses.store');
+    Route::post('/questions/{question}/responses', [ResponseController::class, 'store'])->name('responses.store');
 
+   // membeer dashbaord
     Route::get('/member/dashboard', function () {
         if (Auth::user()->role != UserRole::MEMBER) {
             return redirect()->route('admin.dashboard')->with('error', 'Redirected to Admin area.');
@@ -38,12 +39,18 @@ Route::middleware('auth')->group(function () {
         return view('member.dashboard');
     })->name('dashboard');
 
+    // admiin dashboard
     Route::get('/admin/dashboard', function () {
         if (Auth::user()->role != UserRole::ADMIN) {
             return redirect()->route('dashboard')->with('error', 'Access Denied.');
         }
         return view('admin.dashboard');
     })->name('admin.dashboard');
+
+    // favorite
+    Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
+    Route::post('/questions/{question}/favorite', [FavoriteController::class, 'toggle'])->name('questions.favorite');
+    
 });
 
 

@@ -43,7 +43,7 @@
         </a>
 
         <!-- Card: Ask Question -->
-        <a href="#" class="group bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 hover:border-emerald-500/50 transition-all hover:bg-zinc-900/80">
+        <a href="/questions/create" class="group bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 hover:border-emerald-500/50 transition-all hover:bg-zinc-900/80">
             <div class="h-12 w-12 bg-zinc-800 rounded-xl flex items-center justify-center mb-4 group-hover:bg-emerald-600 transition-colors">
                 <i class="fa-solid fa-pen-to-square text-zinc-400 group-hover:text-white text-xl"></i>
             </div>

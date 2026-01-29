@@ -18,7 +18,7 @@ class Response extends Model
         return $this->belongsTo(User::class);
     }
 
-
+ 
     // relation with question
     public function question(){
         return $this->belongsTo(Question::class);
